@@ -122,6 +122,8 @@
 (defun my-ranger-mode-config ()
   "For Use in ranger-mode."
     (local-set-key (kbd "<SPC>") 'ranger-toggle-mark)
+    (local-set-key (kbd "yy") 'ranger-copy)
+    (local-set-key (kbd "pp") 'ranger-paste)
     )
 
 (add-hook 'ranger-mode-load-hook 'my-ranger-mode-config)
@@ -144,7 +146,6 @@
                  (concat user-emacs-directory "backups")))))
 
 (setq auto-save-default nil)
-
 (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
