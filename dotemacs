@@ -1,0 +1,141 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("f9574c9ede3f64d57b3aa9b9cef621d54e2e503f4d75d8613cbcc4ca1c962c21" "98cc377af705c0f2133bb6d340bf0becd08944a588804ee655809da5d8140de6" "51897d0e185a9d350a124afac8d5e95cda53e737f3b33befc44ab02f2b03dab1" "3b333a6780005b5dbfd1b15525118fe37791387b994008c977c786cd9b464977" "15348febfa2266c4def59a08ef2846f6032c0797f001d7b9148f30ace0d08bcf" default)))
+ '(helm-follow-mode-persistent t)
+ '(package-selected-packages
+   (quote
+    (abyss-theme material-theme leuven-theme flatui-theme web-mode flycheck multiple-cursors magit all-the-icons neotree tern tern-auto-complete dired+ powerline-evil powerline minimap autopair nlinum helm-ag helm yaml-mode fiplr auto-complete js2-mode dracula-theme evil))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'material t)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+(setenv "PATH" (concat (getenv "PATH") ":/Users/sunderv/.nvm/versions/node/v6.9.1/bin/"))
+(setq exec-path (append exec-path '("/Users/sunderv/.nvm/versions/node/v6.9.1/bin/")))
+(add-to-list 'exec-path "/usr/local/bin/")
+
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+
+;;(setenv "PATH" (concat (getenv "PATH") ":/Users/sunderv/.emacs.d/tern/bin"))
+;;(setenv "PATH" (concat "/Users/sunderv/.nvm/versions/node/v6.9.1/bin:" (getenv "PATH")))
+;;(setenv "PATH" (concat "/Users/sunderv/.emacs.d/tern/bin:" (getenv "PATH")))
+
+(require 'evil)
+(require 'ido)
+(require 'tern-auto-complete)
+(require 'helm)
+(require 'neotree)
+(require 'all-the-icons)
+(require 'flycheck)
+
+
+;; Personalization
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq frame-title-format "Emacs")
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(show-paren-mode)
+(global-hl-line-mode)
+(global-nlinum-mode)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(helm-mode 1)
+
+(autopair-global-mode)
+;;(minimap-mode)
+;; End Personalization
+
+(evil-mode 1)
+
+(ac-config-default)
+
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+(add-to-list 'load-path "~/.emacs.d/tern/emacs/")
+(autoload 'tern-mode "tern.el" nil t)
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+
+(add-hook 'js2-mode-hook
+           #'(lambda ()
+               (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
+               (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+
+(setq js-doc-mail-address "vivek.sunder@dowjones.com"
+       js-doc-author (format "Vivek Sunder" js-doc-mail-address))
+
+(eval-after-load 'tern
+'(progn
+(tern-ac-setup)))
+
+(add-hook 'yaml-mode-hook
+(lambda ()
+(define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+(windmove-default-keybindings)
+
+(define-key evil-normal-state-map "\\v" 'split-window-horizontally)
+(define-key evil-normal-state-map "\\h" 'split-window-vertically)
+(global-set-key (kbd "<C-return>") 'neotree-toggle)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "M-k") 'kill-this-buffer)
+(global-set-key (kbd "M-f") 'helm-find-files)
+(global-set-key (kbd "M-b") 'helm-buffers-list)
+
+(global-set-key (kbd "<M-backspace>") 'delete-window)
+
+(setq neo-theme (if window-system 'icons 'arrow))
+
+
+(setq inhibit-splash-screen t)
+(setq-default indent-tabs-mode nil)
+
+(setq js-indent-level 2)
+
+(add-hook 'js2-mode-hook
+           #'(lambda ()
+               (setq evil-shift-width js-indent-level)))
+
+
+
+(defun delete-tern-process ()
+  (interactive)
+  (delete-process "Tern"))
+(powerline-center-theme)
+
+(with-eval-after-load 'evil
+    (defalias #'forward-evil-word #'forward-evil-symbol))
+
+(setq default-directory "~/Projects")
+
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+                 (concat user-emacs-directory "backups")))))
+
+(setq auto-save-default nil)
+
+(setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))

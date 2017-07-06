@@ -1,0 +1,32 @@
+set -sg escape-time 0
+setw -g xterm-keys on
+set -g mouse on
+setw -g mode-keys vi
+set-option -g default-shell /bin/zsh
+set -g default-terminal "xterm-256color"
+bind-key -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-selection
+bind -n C-s set-window-option synchronize-panes
+unbind C-Right
+unbind C-Left
+
+bind -n S-Right select-pane -R
+bind -n S-Left select-pane -L
+bind -n S-Down select-pane -D
+bind -n S-Up select-pane -U
+set -g @shell_mode 'vi'
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Other examples:
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'git@github.com/user/plugin'
+# set -g @plugin 'git@bitbucket.com/user/plugin'
+run '~/.tmux/plugins/tpm/tpm'
+
+bind -t vi-copy y copy-pipe "xsel -i"
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+set -g @plugin 'nhdaly/tmux-scroll-copy-mode'
