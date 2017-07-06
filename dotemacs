@@ -96,11 +96,14 @@
 (global-set-key (kbd "<C-return>") 'neotree-toggle)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "M-k") 'kill-this-buffer)
 (global-set-key (kbd "M-f") 'helm-find-files)
 (global-set-key (kbd "M-b") 'helm-buffers-list)
+(global-set-key (kbd "M-d") 'ranger)
+(global-set-key (kbd "<home>") 'previous-buffer)
+(global-set-key (kbd "<end>") 'next-buffer)
+(global-set-key (kbd "M-g") 'magit-status)
 
 (global-set-key (kbd "<M-backspace>") 'delete-window)
 
@@ -116,6 +119,12 @@
            #'(lambda ()
                (setq evil-shift-width js-indent-level)))
 
+(defun my-ranger-mode-config ()
+  "For Use in ranger-mode."
+    (local-set-key (kbd "<SPC>") 'ranger-toggle-mark)
+    )
+
+(add-hook 'ranger-mode-load-hook 'my-ranger-mode-config)
 
 
 (defun delete-tern-process ()
