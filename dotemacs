@@ -1,7 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
-(custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -12,7 +11,7 @@
  '(helm-follow-mode-persistent t)
  '(package-selected-packages
    (quote
-    (abyss-theme material-theme leuven-theme flatui-theme web-mode flycheck multiple-cursors magit all-the-icons neotree tern tern-auto-complete dired+ powerline-evil powerline minimap autopair nlinum helm-ag helm yaml-mode fiplr auto-complete js2-mode dracula-theme evil))))
+    (restclient abyss-theme material-theme leuven-theme flatui-theme web-mode flycheck multiple-cursors magit all-the-icons neotree tern tern-auto-complete dired+ powerline-evil powerline minimap autopair nlinum helm-ag helm yaml-mode fiplr auto-complete js2-mode dracula-theme evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -25,7 +24,7 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-(setenv "PATH" (concat (getenv "PATH") ":/Users/sunderv/.nvm/versions/node/v6.9.1/bin/"))
+(setenv "PATH" (concat (getenv "PATH") ":/Users/sunderv/.nvm/versions/node/v6.9.1/bin/" ":/Users/sunderv/Software/bash-otp/"))
 (setq exec-path (append exec-path '("/Users/sunderv/.nvm/versions/node/v6.9.1/bin/")))
 (add-to-list 'exec-path "/usr/local/bin/")
 
@@ -67,6 +66,7 @@
 (ac-config-default)
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
 (add-to-list 'load-path "~/.emacs.d/tern/emacs/")
@@ -101,11 +101,16 @@
 (global-set-key (kbd "M-f") 'helm-find-files)
 (global-set-key (kbd "M-b") 'helm-buffers-list)
 (global-set-key (kbd "M-d") 'ranger)
+(global-set-key (kbd "M-s") 'rgrep)
 (global-set-key (kbd "<home>") 'previous-buffer)
 (global-set-key (kbd "<end>") 'next-buffer)
 (global-set-key (kbd "M-g") 'magit-status)
+(global-set-key (kbd "M-l") 'magit-list-repositories)
+(global-set-key [M-tab] 'next-buffer)
 
 (global-set-key (kbd "<M-backspace>") 'delete-window)
+(setq magit-repository-directories `("~/Projects"))
+
 
 (setq neo-theme (if window-system 'icons 'arrow))
 
@@ -128,6 +133,7 @@
 
 (add-hook 'ranger-mode-load-hook 'my-ranger-mode-config)
 
+(define-key dired-mode-map (kbd "S") 'shell)
 
 (defun delete-tern-process ()
   (interactive)
@@ -149,3 +155,22 @@
 (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (edbi yasnippet yaml-mode websocket web-mode terraform-mode tern-auto-complete tblui sublimity restclient ranger projectile powerline-evil nlinum nginx-mode neotree multiple-cursors minimap material-theme markdown-mode magit macrostep leuven-theme json-mode js2-mode js-doc jade-mode ipcalc helm-ag go-mode flycheck flatui-theme fiplr exec-path-from-shell evil-mc dracula-theme dired-ranger dired+ company autopair all-the-icons abyss-theme))))
+
+(tramp-set-completion-function "ssh"
+                               '((tramp-parse-sconfig "/etc/ssh_config")
+                                 (tramp-parse-sconfig "~/.ssh/config")))
+
+(setq tramp-default-method "ssh")
+
+(setq auth-sources '("~/.authinfo"))
+
+(defadvice projectile-project-root (around ignore-remote first activate)
+  (unless (file-remote-p default-directory) ad-do-it))
