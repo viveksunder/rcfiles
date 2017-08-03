@@ -162,7 +162,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (edbi yasnippet yaml-mode websocket web-mode terraform-mode tern-auto-complete tblui sublimity restclient ranger projectile powerline-evil nlinum nginx-mode neotree multiple-cursors minimap material-theme markdown-mode magit macrostep leuven-theme json-mode js2-mode js-doc jade-mode ipcalc helm-ag go-mode flycheck flatui-theme fiplr exec-path-from-shell evil-mc dracula-theme dired-ranger dired+ company autopair all-the-icons abyss-theme))))
+    (org-bullets itail org-evil edbi yasnippet yaml-mode websocket web-mode terraform-mode tern-auto-complete tblui sublimity restclient ranger projectile powerline-evil nlinum nginx-mode neotree multiple-cursors minimap material-theme markdown-mode magit macrostep leuven-theme json-mode js2-mode js-doc jade-mode ipcalc helm-ag go-mode flycheck flatui-theme fiplr exec-path-from-shell evil-mc dracula-theme dired-ranger dired+ company autopair all-the-icons abyss-theme))))
 
 (tramp-set-completion-function "ssh"
                                '((tramp-parse-sconfig "/etc/ssh_config")
@@ -174,3 +174,10 @@
 
 (defadvice projectile-project-root (around ignore-remote first activate)
   (unless (file-remote-p default-directory) ad-do-it))
+
+(add-hook 'org-mode-hook 
+          (lambda ()
+            (local-set-key (kbd "M-[") 'org-insert-todo-heading)))
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
