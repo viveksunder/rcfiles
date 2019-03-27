@@ -13,22 +13,36 @@ set nowrap
 set noshowmode
 set backspace=indent,eol,start "Backspace sometimes does not work when there are indents
 " For Jedi Call Signatures
-execute pathogen#infect()
-call pathogen#helptags()
+
+call plug#begin('~/.vim/plugged')
+Plug 'mattn/emmet-vim'
+Plug 'mkarmona/materialbox'
+Plug 'davidhalter/jedi-vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'nvie/vim-flake8'
+Plug 'tpope/vim-eunuch'
+Plug 'heavenshell/vim-pydocstring'
+Plug 'godlygeek/tabular'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-dispatch'
+Plug 'skywind3000/asyncrun.vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'janko/vim-test'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'vimwiki/vimwiki'
+call plug#end()
+
 filetype plugin indent on
 syntax on
 set path=$PWD/**
 let mapleader = '\'
 set laststatus=2
-let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
-      \ --ignore .git
-      \ --ignore node_modules
-      \ --ignore .svn
-      \ --ignore .hg
-      \ --ignore .DS_Store
-      \ --ignore "**/*.pyc"
-      \ -g ""'
 autocmd FileType python setlocal completeopt-=preview
+autocmd FileType typescript setlocal shiftwidth=2 tabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 nnoremap <silent> <Tab> :bn<CR>
 
 " Splits
@@ -45,10 +59,10 @@ map <silent> <Leader>w :w<CR>
 map <silent> <Leader>q :q<CR>
 
 "Window nav
-map [C <C-Right>
-map [D <C-Left>
-map [A <C-Up>
-map [B <C-Down>
+map [C <C-Right>
+map [D <C-Left>
+map [A <C-Up>
+map [B <C-Down>
 map <silent> <C-Right> :wincmd l<CR>
 map <silent> <C-Left> :wincmd h<CR>
 map <silent> <C-Up> :wincmd k<CR>
@@ -67,64 +81,46 @@ map <silent> <Leader>- :noh<CR>
 " nu nonu toggle
 map <silent> <Leader>l :set nu!<CR>
 
-" background dark light toggle
-map <silent> <F6> :call ToggleBackground()<CR>
-
-" Toggle Comment
-map <silent> <Leader><Leader> :call NERDComment(0, "toggle")<CR>
-
 " Nerd Tree Toggle
 map <silent> <Leader>] :NERDTreeToggle<CR>
 
-function! ToggleBackground()
-    if &background == "dark" 
-        set background=light
-    else
-        set background=dark
-    endif
-endfunction
-
-let g:jedi#show_call_signatures = 0
-let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#use_splits_not_buffers = "left"
-let g:jedi#popup_on_dot = 0
-
-" Ultisnips + vim-snippets path
-let g:UltiSnipsSnippetDirectories = ["UltiSnips", "~/.vim/bundle/vim-snippets/UltiSnips"]
-let g:UltiSnipsJumpForwardTrigger = "<right>" 
-let g:UltiSnipsJumpBackwardTrigger = "<left>" 
-
-let g:dbext_default_profile_dms_dbi = 'type=ODBC:user=livelink1:passwd=l1v3l1nk:dsnname=dms'
-let g:dbext_default_profile_security = 'type=MYSQL:user=root:passwd=:dbname=security'
-let g:dbext_default_profile_docuserv = 'type=MYSQL:user=root:passwd=:dbname=docuserv'
 highlight DiffAdd    cterm=bold gui=none guifg=bg guibg=#70B45A
 highlight DiffDelete cterm=bold gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold gui=none guifg=bg guibg=Pink
 highlight DiffText   cterm=bold gui=none guifg=bg guibg=Red
 
-"colorscheme solarized
-let g:slime_target = "tmux"
-let g:slime_paste_file = "$HOME/.slime_paste"
-let g:slime_default_config = {"socket_name":"default","target_pane": "1"}
-let g:slime_python_ipython = 1 
+"colorscheme materialbox
 
 set ttimeoutlen=0
 "set t_Co=256
 "set foldmethod=indent
 set nofoldenable
-if !has('nvim')
-    set term=xterm-256color
-endif
 "set t_ut=
 set background=dark
 
-" Syntastic syntax checking config.
-let g:syntastic_mode_map = {
-        \ "mode": "passive"}
-let g:syntastic_python_flake8_args = '--ignore="E501,W293,E126,E123,E121,E127"'
+se guifont=Menlo:h12
 
-set clipboard=unnamedplus
-let g:plantuml_executable_script='java -jar ~/shell/bin/plantuml.jar'
-nnoremap <silent> <F5> :make<CR>
-let g:multi_cursor_exit_from_visual_mode = 0
-let g:multi_cursor_exit_from_insert_mode = 0
+let g:jedi#use_splits_not_buffers = "left"
+
+autocmd FileType python map <buffer> <Leader>f :call Flake8()<CR>
+
+" vim-pydocstring
+nmap <silent> <Leader>' <Plug>(pydocstring)
+set rtp+=/usr/local/opt/fzf
+map <silent> <Leader>\ :FZF<CR>
+nmap <silent> <Leader>t :TestFile<CR>
+" for vim-test
+let test#strategy = "asyncrun"
+" for asyncrun so quickfix window opens after process finishes executing
+let g:asyncrun_open = 25 
+" for asyncrun python tests so python output is not buffered
+let $PYTHONUNBUFFERED = 1
+" fzf buffer list
+nmap <silent> <Leader>b :Buffers<CR>
+" ultisnips keys
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+" materialbox theme for terminal
+colorscheme materialbox
