@@ -33,6 +33,7 @@ Plug 'janko/vim-test'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 filetype plugin indent on
