@@ -76,7 +76,7 @@ if has('nvim')
 endif
 
 "Wipe buffer
-map <silent> <Leader><BS> :bw<CR> 
+map <silent> <Leader><BS> :bw<CR>
 
 " :noh
 map <silent> <Leader>- :noh<CR>
@@ -114,7 +114,7 @@ nmap <silent> <Leader>t :TestFile<CR>
 " for vim-test
 let test#strategy = "asyncrun"
 " for asyncrun so quickfix window opens after process finishes executing
-let g:asyncrun_open = 25 
+let g:asyncrun_open = 25
 " for asyncrun python tests so python output is not buffered
 let $PYTHONUNBUFFERED = 1
 " fzf buffer list
@@ -129,7 +129,7 @@ colorscheme materialbox
 " apply ale fixers when the file is saved
 let g:ale_fix_on_save = 1
 " for ale linting
-let b:ale_linters = ['flake8', 'pyls']
+let b:ale_linters = ['flake8', 'pyls'] " pip install python-language-server[all]
 " ale fixers
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace']
