@@ -8,7 +8,7 @@ function! PyDebug()
 
     if curline != '1'
         " add curline as a breakpoint to the file pudb looks at when it starts
-        echo system('echo "b '.expand('%:p').':'.curline.'" > ~/.config/pudb/saved-breakpoints-3.6')
+        call system('echo "b '.expand('%:p').':'.curline.'" > ~/.config/pudb/saved-breakpoints-3.6')
         let apple_script = 'tell application "iTerm2"\n
                     \create window with default profile\n
                     \tell current session of current window\n
