@@ -12,7 +12,9 @@ set number
 set nowrap
 set noshowmode
 set backspace=indent,eol,start "Backspace sometimes does not work when there are indents
-" For Jedi Call Signatures
+" jedi goto definition remap
+let g:jedi#goto_command = ""
+let g:jedi#goto_assignments_command = ""
 " for ale
 let g:ale_completion_enabled = 1
 
@@ -27,9 +29,9 @@ Plug 'heavenshell/vim-pydocstring'
 Plug 'godlygeek/tabular'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-dispatch'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'janko/vim-test'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -106,11 +108,13 @@ se guifont=Menlo:h12
 let g:jedi#use_splits_not_buffers = "left"
 
 autocmd FileType python map <buffer> <Leader>f :call Flake8()<CR>
+autocmd FileType python map <buffer> <Leader>d :call PyDebug()<CR>
 
 " vim-pydocstring
 nmap <silent> <Leader>' <Plug>(pydocstring)
 map <silent> <Leader>\ :FZF<CR>
 nmap <silent> <Leader>t :TestFile<CR>
+nmap <silent> <Leader>m :TestNearest<CR>
 " for vim-test
 let test#strategy = "asyncrun"
 " for asyncrun so quickfix window opens after process finishes executing
@@ -134,3 +138,9 @@ let b:ale_linters = ['flake8', 'pyls'] " pip install python-language-server[all]
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace']
 \}
+" So fugitive push etc are run via asyncrun and not dispatch vim
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+" jedi go to definition
+nmap <silent> <Leader>g :call jedi#goto()<CR>
+" source pydebug
+source ~/.vim/myvimscripts/pydebug.vim
