@@ -1,4 +1,7 @@
 function! PyDebug()
+    " Launches an iterm2 window and invokes pudb on the file that's currently
+    " open. Also sets a breakpoint on the current line and runs the program
+    " upto that line.
     let python = trim(system('echo `which python`'))
     call system('rm ~/.config/pudb/saved-breakpoints-3.6')
     let curline = line('.')
