@@ -13,8 +13,6 @@ set nowrap
 set noshowmode
 set backspace=indent,eol,start "Backspace sometimes does not work when there are indents
 " jedi goto definition remap
-let g:jedi#goto_command = ""
-let g:jedi#goto_assignments_command = ""
 " for ale
 let g:ale_completion_enabled = 1
 
@@ -38,6 +36,7 @@ Plug 'honza/vim-snippets'
 Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'
+Plug 'fatih/vim-go', { 'do': 'GoUpdateBinaries' }
 call plug#end()
 
 filetype plugin indent on
@@ -108,7 +107,6 @@ se guifont=Menlo:h12
 let g:jedi#use_splits_not_buffers = "left"
 
 autocmd FileType python map <buffer> <Leader>f :call Flake8()<CR>
-autocmd FileType python map <buffer> <Leader>d :call PyDebug()<CR>
 
 " vim-pydocstring
 nmap <silent> <Leader>' <Plug>(pydocstring)
@@ -140,7 +138,8 @@ let g:ale_fixers = {
 \}
 " So fugitive push etc are run via asyncrun and not dispatch vim
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-" jedi go to definition
-nmap <silent> <Leader>g :call jedi#goto()<CR>
 " source pydebug
 source ~/.vim/myvimscripts/pydebug.vim
+
+" jedi
+nmap <silent> <Leader>" :call jedi#show_documentation()<CR>
